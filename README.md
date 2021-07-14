@@ -66,3 +66,11 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 
 	kubeadm token create --print-join-command # on master
 	#run the command returned on workers
+
+> 12. Enable kubectl autocompletion
+
+	# as root
+	kubectl completion bash >/etc/bash_completion.d/kubectl
+	# as non root
+	echo 'alias k=kubectl' >>~/.bashrc
+	echo 'complete -F __start_kubectl k' >>~/.bashrc
