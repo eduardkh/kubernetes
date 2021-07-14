@@ -52,7 +52,7 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 
 > 8. Initialize Kubernetes Cluster (master only)
 
-	kubeadm init --apiserver-advertise-address=192.168.1.151 --pod-network-cidr=10.0.0.0/16  --ignore-preflight-errors=all
+	kubeadm init --apiserver-advertise-address=192.168.1.151 --pod-network-cidr=192.168.0.0/16  --ignore-preflight-errors=all
 
 > 9. Deploy Calico network driver
 
