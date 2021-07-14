@@ -25,6 +25,8 @@ end
 
   # Install avahi on all machines  
   config.vm.provision "shell", inline: <<-SHELL
-    echo hello
+  sudo echo "192.168.1.151 master" | sudo tee -a /etc/hosts
+  sudo echo "192.168.1.152 node2" | sudo tee -a /etc/hosts
+  sudo echo "192.168.1.153 node3" | sudo tee -a /etc/hosts
   SHELL
 end
