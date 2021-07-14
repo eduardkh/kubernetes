@@ -56,7 +56,7 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 
 > 9. Deploy Calico network driver
 
-	kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+	kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.19/manifests/calico.yaml
 
 > 10. run kubectl commands as non-root user
 
