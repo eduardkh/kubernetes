@@ -1,0 +1,37 @@
+# https://github.com/justmeandopensource/kubernetes/tree/master/vagrant-provisioning
+BOX_IMAGE = "generic/ubuntu2010"
+BOX_VERSION = "3.6.12"
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
+VAGRANT_NO_PARALLEL = true
+
+Vagrant.configure("2") do |config|
+  config.vm.provision "shell", path: "bootstrap.sh"
+
+  # Kubernetes Master Server
+  config.vm.define "master" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.box_version       = BOX_VERSION
+    subconfig.vm.box_check_update  = false
+    subconfig.vm.hostname = "master"
+    subconfig.vm.network :public_network, ip: "192.168.1.151", hostname: true, bridge: "Qualcomm Atheros AR8151 PCI-E Gigabit Ethernet Controller (NDIS 6.30)"
+    subconfig.vm.provision "shell", path: "bootstrap_kmaster.sh"
+    subconfig.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", "2048"] 
+     end
+  end
+  # Kubernetes Worker Nodes
+NODE_COUNT = 3
+(2..NODE_COUNT).each do |i|
+  config.vm.define "node#{i}" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.box_version       = BOX_VERSION
+    subconfig.vm.box_check_update  = false
+    subconfig.vm.hostname = "node#{i}"
+    subconfig.vm.network :public_network, ip: "192.168.1.#{i + 150}", hostname: true, bridge: "Qualcomm Atheros AR8151 PCI-E Gigabit Ethernet Controller (NDIS 6.30)"
+    subconfig.vm.provision "shell", path: "bootstrap_kworker.sh"
+    subconfig.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", "1024"] 
+    end
+  end
+end
+end
