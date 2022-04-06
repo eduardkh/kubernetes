@@ -24,3 +24,15 @@ kubectl describe deployment nginx-deployment
 >for more follow the link
 
 <https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/>
+
+> add metallb to the mix
+
+```bash
+# https://metallb.universe.tf/installation/ #set mode: "ipvs"
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
+k apply -f metallbConfigMap.yaml
+# test type: LoadBalancer
+k apply -f nginxDeployment.yaml
+k apply -f nginxService.yaml
+```
