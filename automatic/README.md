@@ -7,11 +7,7 @@
 vagrant up
 # after the cluster is up
 vagrant ssh master
-```
-
-> under admin user master box create .kube/config
-
-```bash
+# under admin user (master box) create .kube/config
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -27,8 +23,10 @@ kubectl describe deployment nginx-deployment
 
 > add metallb to the mix
 
+<https://metallb.universe.tf/installation/>
+
 ```bash
-# https://metallb.universe.tf/installation/ #set mode: "ipvs"
+# set mode: "ipvs"
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
 k apply -f metallbConfigMap.yaml
