@@ -29,6 +29,7 @@ k3s completion zsh > /usr/share/zsh/functions/Completion/Linux/_k3s
 ```bash
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 kubectl config view --raw > ~/.kube/config
+chmod 600 ~/.kube/config
 # as root
 helm completion zsh > /usr/share/zsh/functions/Completion/Linux/_helm
 ```
