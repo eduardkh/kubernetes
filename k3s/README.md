@@ -23,3 +23,12 @@ kubectl get all -A
 ```bash
 k3s completion zsh > /usr/share/zsh/functions/Completion/Linux/_k3s
 ```
+
+> make helm work with k3s and add completion
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+kubectl config view --raw > ~/.kube/config
+# as root
+helm completion zsh > /usr/share/zsh/functions/Completion/Linux/_helm
+```
