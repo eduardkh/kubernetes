@@ -1,0 +1,61 @@
+# https://github.com/justmeandopensource/kubernetes/tree/master/vagrant-provisioning
+
+ENV["VAGRANT_NO_PARALLEL"] = "yes"
+
+VAGRANT_BOX = "generic/ubuntu2204"
+VAGRANT_BOX_VERSION = "4.2.16"
+CPUS_MASTER_NODE = 4
+CPUS_WORKER_NODE = 2
+MEMORY_MASTER_NODE = 4096
+MEMORY_WORKER_NODE = 2048
+WORKER_NODES_COUNT = 3
+BRIDGE = "Intel(R) Ethernet Controller (3) I225-V"
+
+Vagrant.configure(2) do |config|
+  config.vm.provision "shell", path: "bootstrap.sh"
+
+  # Kubernetes Master Server
+  config.vm.define "master" do |node|
+    node.vm.box = VAGRANT_BOX
+
+    node.vm.box_check_update = false
+    node.vm.box_version = VAGRANT_BOX_VERSION
+    node.vm.hostname = "master"
+    node.vm.network :public_network, ip: "192.168.1.151", hostname: true, bridge: BRIDGE
+    node.vm.provider :virtualbox do |v|
+      v.name = "master"
+      v.memory = MEMORY_MASTER_NODE
+      v.cpus = CPUS_MASTER_NODE
+    end
+    node.vm.provider :vmware_desktop do |v|
+      v.gui = true
+      v.vmx["memsize"] = MEMORY_MASTER_NODE
+      v.vmx["numvcpus"] = CPUS_MASTER_NODE
+    end
+    node.vm.provision "shell", path: "bootstrap_kmaster.sh"
+  end
+
+  # Kubernetes Worker Nodes
+  (3..WORKER_NODES_COUNT).each do |i|
+    config.vm.define "node#{i}" do |node|
+      node.vm.box = VAGRANT_BOX
+      node.vm.box_check_update = false
+      node.vm.box_version = VAGRANT_BOX_VERSION
+      node.vm.hostname = "node#{i}"
+
+      node.vm.network :public_network, ip: "192.168.1.#{i + 150}", hostname: true, bridge: BRIDGE
+
+      node.vm.provider :virtualbox do |v|
+        v.name = "node#{i}"
+        v.memory = MEMORY_WORKER_NODE
+        v.cpus = CPUS_WORKER_NODE
+      end
+      node.vm.provider :vmware_desktop do |v|
+        v.gui = true
+        v.vmx["memsize"] = MEMORY_WORKER_NODE
+        v.vmx["numvcpus"] = CPUS_WORKER_NODE
+      end
+      node.vm.provision "shell", path: "bootstrap_kworker.sh"
+    end
+  end
+end
