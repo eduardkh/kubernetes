@@ -1,5 +1,11 @@
 #!/bin/bash
 
+## !IMPORTANT ##
+#
+## This script is tested only in the generic/ubuntu2204 Vagrant box
+## If you use a different version of Ubuntu or a different Ubuntu Vagrant box test this again
+#
+
 echo "[TASK 1] Disable and turn off SWAP"
 sed -i '/swap/d' /etc/fstab
 swapoff -a
@@ -25,9 +31,16 @@ sysctl --system >/dev/null 2>&1
 
 echo "[TASK 5] Install containerd runtime"
 apt update -qq >/dev/null 2>&1
-apt install -qq -y containerd apt-transport-https >/dev/null 2>&1
-mkdir /etc/containerd
+apt install -qq -y ca-certificates curl gnupg lsb-release >/dev/null 2>&1
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg >/dev/null 2>&1
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt update -qq >/dev/null 2>&1
+apt install -qq -y containerd.io >/dev/null 2>&1
 containerd config default > /etc/containerd/config.toml
+sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 systemctl restart containerd
 systemctl enable containerd >/dev/null 2>&1
 
@@ -36,7 +49,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - >/
 apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" >/dev/null 2>&1
 
 echo "[TASK 7] Install Kubernetes components (kubeadm, kubelet and kubectl)"
-apt install -qq -y kubeadm=1.22.0-00 kubelet=1.22.0-00 kubectl=1.22.0-00 >/dev/null 2>&1
+apt install -qq -y kubeadm=1.26.0-00 kubelet=1.26.0-00 kubectl=1.26.0-00 >/dev/null 2>&1
 
 echo "[TASK 8] Enable ssh password authentication"
 sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
