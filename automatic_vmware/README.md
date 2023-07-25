@@ -43,8 +43,11 @@ kubectl apply -f - -n kube-system
 # Installation By Manifest
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
 
-k apply -f ipaddresspool.yaml
-k apply -f l2advertisement.yaml
+# apply address-pool and L2 configuration
+git clone https://github.com/eduardkh/kubernetes.git
+cd kubernetes/automatic_vmware/
+kubectl apply -f ipaddresspool.yaml
+kubectl apply -f l2advertisement.yaml
 
 # test type: LoadBalancer
 kubectl create deployment nginx --image=nginx
