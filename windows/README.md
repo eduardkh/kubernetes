@@ -22,7 +22,6 @@ minikube start --cpus=4 --memory=4096 --driver=hyperv --profile=argo
 minikube completion powershell >> $PROFILE
 kubectl completion powershell >> $PROFILE
 helm completion powershell >> $PROFILE
-argocd completion powershell >> $PROFILE
 ```
 
 > interact with argocd (UI and CLI)
