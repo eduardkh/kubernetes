@@ -16,6 +16,7 @@ minikube up
 > add completion in powershell
 
 ```powershell
+minikube completion powershell >> $PROFILE
 kubectl completion powershell >> $PROFILE
 helm completion powershell >> $PROFILE
 ```
