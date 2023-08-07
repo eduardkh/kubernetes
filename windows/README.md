@@ -11,6 +11,8 @@ choco install kubernetes-helm -y
 
 ```powershell
 minikube up
+# or
+minikube start --cpus=4 --memory=4096 --driver=hyperv --profile=argo
 ```
 
 > add completion in powershell
@@ -19,4 +21,11 @@ minikube up
 minikube completion powershell >> $PROFILE
 kubectl completion powershell >> $PROFILE
 helm completion powershell >> $PROFILE
+```
+
+> delete a kubernetes instance
+
+```powershell
+minikube status --profile=argo
+minikube delete --profile=argo
 ```
