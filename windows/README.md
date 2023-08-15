@@ -29,8 +29,10 @@ helm completion powershell >> $PROFILE
 ```powershell
 # expose the API
 kubectl port-forward svc/argo-cd-argocd-server -n argocd 8080:443
-# get the initial password
+# get the initial password (Linux)
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+# get the initial password (Windows)
+[System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}")))
 # login with the CLI
 argocd login --insecure localhost:8080 --username admin --password BXfN5p7HLTFcllms
 # update the admin password
